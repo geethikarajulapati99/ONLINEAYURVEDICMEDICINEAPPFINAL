@@ -8,7 +8,7 @@ public interface ICustomerService {
 	CustomerModel add(CustomerModel customer) throws CustomerNotFoundException;
 	CustomerModel save(CustomerModel customer) throws CustomerNotFoundException;
 	void deleteById(Long customerId);
-	CustomerModel findById(Long customerId);
+	CustomerModel findById(Long customerId) throws CustomerNotFoundException;
 	List<CustomerModel> findAll();
 	boolean existsByMobileNumber(Long mobileNumber); 
 	boolean existsByEmailId(String emailId);

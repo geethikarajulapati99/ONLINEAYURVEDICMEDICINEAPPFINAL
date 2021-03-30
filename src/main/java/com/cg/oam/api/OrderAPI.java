@@ -32,11 +32,9 @@ public class OrderAPI {
 
 	@GetMapping("/getorderdate/{orderDate}")
 	public ResponseEntity<List<OrderModel>> findAllByOrderDate(@PathVariable(name = "orderDate") @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) LocalDate orderDate) {
-		System.out.println("date is valid"+orderDate);
 		ResponseEntity<OrderModel> response = null;
 		List<OrderModel> order = orderService.findAllByOrderDate(orderDate);
-
-			return new ResponseEntity<>(orderService.findAllByOrderDate(orderDate), HttpStatus.OK); 
+		return new ResponseEntity<>(orderService.findAllByOrderDate(orderDate), HttpStatus.OK); 
 		
 	}
 	

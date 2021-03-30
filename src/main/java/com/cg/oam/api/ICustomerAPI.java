@@ -29,7 +29,7 @@ public class ICustomerAPI {
 	}
 	
 	@GetMapping("/getcustomer/{customerId}")
-	public ResponseEntity<CustomerModel> findById(@PathVariable("customerId") Long customerId)throws CustomerNotFoundException {
+	public ResponseEntity<CustomerModel> findById(@PathVariable("customerId") Long customerId)throws CustomerNotFoundException{
 		ResponseEntity<CustomerModel> response = null;
 		System.out.println("find-by-cusid");
 		CustomerModel cus = cusService.findById(customerId);
@@ -50,7 +50,7 @@ public class ICustomerAPI {
 	}
 	
 	@DeleteMapping("/deletecustomer/{customerId}")
-	public ResponseEntity<Void> deleteCustomer(@PathVariable("customerId") Long customerId) {
+	public ResponseEntity<Void> deleteCustomer(@PathVariable("customerId") Long customerId) throws CustomerNotFoundException{
 		ResponseEntity<Void> response = null;
 		CustomerModel cus = cusService.findById(customerId);
 		if (cus == null) {

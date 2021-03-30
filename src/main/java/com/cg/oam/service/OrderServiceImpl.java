@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.cg.oam.entity.Customer;
 import com.cg.oam.entity.Order;
+import com.cg.oam.exception.MedicineNotFoundException;
 import com.cg.oam.exception.OrderNotFoundException;
 import com.cg.oam.model.OrderModel;
 import com.cg.oam.repository.ICustomerRepository;
@@ -88,8 +89,10 @@ public class OrderServiceImpl implements IOrderService{
 	}
 
 	@Override
-	public OrderModel findById(Long orderId) {
-		return parser.parse(ordRepo.findById(orderId).orElse(null));
+	public OrderModel findById(Long orderId) throws OrderNotFoundException {
+		if (!ordRepo.existsById(orderId))
+			throw new OrderNotFoundException("No Order  found for the given id");
+		return parser.parse(ordRepo.findById(orderId).get());
 	}
 
 
@@ -100,7 +103,13 @@ public class OrderServiceImpl implements IOrderService{
 	}
 	
 	@Override
-	public List<OrderModel> findAllByCustomerId(Long customerId){
+	public List<OrderModel> findAllByCustomerId(Long customerId)throws OrderNotFoundException {
+
+		Customer customer = customerRepository.findById(customerId).orElse(null);
+
+		if (customer == null) {
+			throw new OrderNotFoundException("No Such order");
+		}
 		Optional<Customer> customerOptional = customerRepository.findById(customerId);	
 		List<Order> orders = customerOptional.get().getOrder();	
 		return orders.stream().map(parser::parse).collect(Collectors.toList());

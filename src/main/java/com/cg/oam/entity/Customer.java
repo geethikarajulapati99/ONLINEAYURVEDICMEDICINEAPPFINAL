@@ -107,6 +107,9 @@ public class Customer implements Serializable{
 
 	public void setOrder(List<Order> order) {
 		this.order = order;
-	}	
+	}
+	 
+	
+	
 
 }

@@ -128,6 +128,4 @@ public class Order implements Serializable {
 		this.medicineList = medicineList;
 	}
 
-	
-
 }

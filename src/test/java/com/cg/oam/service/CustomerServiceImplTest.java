@@ -3,6 +3,7 @@ package com.cg.oam.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -10,7 +11,6 @@ import static org.mockito.Mockito.verify;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,6 @@ import com.cg.oam.entity.Customer;
 import com.cg.oam.exception.CustomerNotFoundException;
 import com.cg.oam.model.CustomerModel;
 import com.cg.oam.repository.ICustomerRepository;
-
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceImplTest {
 	@Mock
@@ -34,7 +33,7 @@ public class CustomerServiceImplTest {
 
 	@Test
 	@DisplayName("delete customer by using id")
-	void testDeleteById() {
+	void testDeleteById() throws CustomerNotFoundException {
 		Customer testdata = new Customer(1L,"swarn","swara@123",9896540123L,"swara@gmail.com");
 		CustomerModel expected = new CustomerModel(1L,"swarn","swara@123",9896540123L,"swara@gmail.com");
 		customerServiceImpl.deleteById(testdata.getCustomerId());
@@ -43,12 +42,16 @@ public class CustomerServiceImplTest {
 	
 	@Test
 	@DisplayName("get customer by id")
-	void testFindById() {
+	void testFindById() throws CustomerNotFoundException {
+		
 		
 		Customer testdata = new Customer(1L,"swarna","swarna@123",9876540123L,"swarna@gmail.com");
 		CustomerModel expected = new CustomerModel(1L,"swarna","swarna@123",9876540123L,"swarna@gmail.com");
 		
 		Mockito.when(customerRepository.findById(testdata.getCustomerId())).thenReturn(Optional.of(testdata));
+		Mockito.when(customerRepository.existsById(1L)).thenReturn(true);
+		Mockito.when(customerRepository.findById(1L)).thenReturn(Optional.of(testdata));
+
 		
 		CustomerModel actual=customerServiceImpl.findById(testdata.getCustomerId());
 		assertEquals(expected,actual);
@@ -57,15 +60,11 @@ public class CustomerServiceImplTest {
 	
 	@Test
 	@DisplayName("get customer by id : id not exists")
-	void testFindByIdNotExists() {
-		
-		Customer testdata = new Customer(2L,"swarna","swarna@123",9876540123L,"swarna@gmail.com");
-		CustomerModel expected = new CustomerModel(1L,"swarna","swarna@123",9876540123L,"swarna@gmail.com");
-		
-		Mockito.when(customerRepository.findById(testdata.getCustomerId())).thenReturn(Optional.of(testdata));
-		
-		CustomerModel actual=customerServiceImpl.findById(testdata.getCustomerId());
-		assertNotEquals(expected,actual);
+	void testFindByIdNotExists() throws CustomerNotFoundException {
+		Mockito.when(customerRepository.existsById(101L)).thenReturn(false);
+		assertThrows(CustomerNotFoundException.class, () -> {
+			customerServiceImpl.findById(101L);
+		});
 		
 	}
 	
@@ -140,16 +139,4 @@ public class CustomerServiceImplTest {
 		
 	}
 	
-	@Test
-	@DisplayName("get by id return null")
-	void testGetByIdNull() {		
-		
-		Mockito.when(customerRepository.findById(1L)).thenReturn(Optional.empty());
-		
-		CustomerModel actual = customerServiceImpl.findById(1L);
-		assertNull(actual);
 	}
-
-	
-
-}

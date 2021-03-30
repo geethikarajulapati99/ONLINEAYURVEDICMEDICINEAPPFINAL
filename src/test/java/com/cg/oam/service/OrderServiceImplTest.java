@@ -18,6 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.cg.oam.entity.Customer;
 import com.cg.oam.entity.Order;
+import com.cg.oam.exception.MedicineNotFoundException;
 import com.cg.oam.exception.OrderNotFoundException;
 import com.cg.oam.model.OrderModel;
 import com.cg.oam.repository.IOrderRepository;
@@ -32,7 +33,7 @@ class OrderServiceImplTest {
 	
 	@Test
 	@DisplayName("delete order by id")
-	void testDeleteById() {
+	void testDeleteById() throws OrderNotFoundException {
 		Long orderId = 1L;
 		orderServiceImpl.deleteById(orderId);
 		verify(orderRepository,times(1)).deleteById(orderId);
@@ -47,7 +48,7 @@ class OrderServiceImplTest {
 		
 		
 		Mockito.when(orderRepository.findById(testdata.getOrderId())).thenReturn(Optional.of(testdata));
-		
+		Mockito.when(orderRepository.existsById(4L)).thenReturn(true);
 		OrderModel actual=orderServiceImpl.findById(testdata.getOrderId());
 		assertEquals(expected,actual);
 	}
@@ -73,20 +74,16 @@ class OrderServiceImplTest {
 	}
 	
 	@Test
-	@DisplayName("get medicine by id : id not exists")
-	void testFindByIdNotExists() {
-		Order testdata = new Order(4L,LocalDate.parse("2021-03-24"),LocalDate.parse("2021-03-30"),65,"Delivered", new Customer(1L,"swarn","swara@123",9896540123L,"swara@gmail.com"));
-		OrderModel expected = new OrderModel(1L,LocalDate.parse("2021-03-24"),LocalDate.parse("2021-03-30"),65,"Delivered",1L);
-		
-		
-		Mockito.when(orderRepository.findById(testdata.getOrderId())).thenReturn(Optional.of(testdata));
-		
-		OrderModel actual=orderServiceImpl.findById(testdata.getOrderId());
-		assertNotEquals(expected,actual);
+	@DisplayName("get order by id : id not exists")
+	void testFindByIdNotExists() throws OrderNotFoundException {
+		Mockito.when(orderRepository.existsById(4L)).thenReturn(false);
+		assertThrows(OrderNotFoundException.class, () -> {
+			orderServiceImpl.findById(4L);
+		});
 	}
 
 	@Test
-	@DisplayName("find all the medicine:no medicine is available")
+	@DisplayName("find all the order:no order is available")
 	void testFindAll1() {
 		List<Order> testdata = Arrays.asList(new Order[] {
 				 new Order(1L,LocalDate.parse("2021-03-24"),LocalDate.parse("2022-03-24"),65,"Delivered", new Customer(1L,"swarn","swara@123",9896540123L,"swara@gmail.com")),
@@ -104,15 +101,6 @@ class OrderServiceImplTest {
 		assertNotEquals(expected,actual);
 	}
 	
-	@Test
-	@DisplayName("get by id return null")
-	void testGetByIdNull() {		
-		
-		Mockito.when(orderRepository.findById(1L)).thenReturn(Optional.empty());
-		
-		OrderModel actual = orderServiceImpl.findById(1L);
-		assertNull(actual);
-	}
 	
 	
 

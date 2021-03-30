@@ -94,7 +94,7 @@ public class EMParser {
 		medicines =orderModel.getMedicineList();
 	 
 		for (Medicine medical : medicines) { 
-			totalCost = totalCost + medical.getMedicineCost() * medical.getQuantity(); 
+			totalCost = totalCost + medical.getMedicineCost(); 
 		}
 		return totalCost;
 	}

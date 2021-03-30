@@ -18,6 +18,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.cg.oam.entity.Company;
 import com.cg.oam.entity.Medicine;
+import com.cg.oam.exception.CustomerNotFoundException;
+import com.cg.oam.exception.MedicineNotFoundException;
 import com.cg.oam.model.MedicineModel;
 import com.cg.oam.repository.IMedicineRepository;
 
@@ -35,7 +37,7 @@ class MedicineServiceImplTest {
 
 	@Test
 	@DisplayName("delete medicine by id")
-	void testDeleteById() {
+	void testDeleteById() throws MedicineNotFoundException {
 		String medicineId="O1";
 		medicineServiceImpl.deleteById(medicineId);
 		verify(medicineRepository,times(1)).deleteById(medicineId);
@@ -44,12 +46,13 @@ class MedicineServiceImplTest {
 	
 	@Test
 	@DisplayName("get medicine by id")
-	void testFindById() {
+	void testFindById() throws MedicineNotFoundException {
 		Medicine testdata = new Medicine("M01","paracetmol",56,LocalDate.parse("2021-03-22"),LocalDate.parse("2022-09-09"),12,Company.Divis,"HERBAL");
 		MedicineModel expected = new MedicineModel("M01","paracetmol",56,LocalDate.parse("2021-03-22"),LocalDate.parse("2022-09-09"),"HERBAL","Divis");
 		
 		
 		Mockito.when(medicineRepository.findById(testdata.getMedicineId())).thenReturn(Optional.of(testdata));
+		Mockito.when(medicineRepository.existsById("M01")).thenReturn(true);
 		
 		MedicineModel actual = medicineServiceImpl.findById(testdata.getMedicineId());
 		assertEquals(expected,actual);
@@ -57,26 +60,13 @@ class MedicineServiceImplTest {
 	}
 	
 	@Test
-	@DisplayName("get by id return null")
-	void testGetByIdNull() {		
-		
-		Mockito.when(medicineRepository.findById("M01")).thenReturn(Optional.empty());
-		
-		MedicineModel actual = medicineServiceImpl.findById("M01");
-		assertNull(actual);
-	}
-	
-	@Test
 	@DisplayName("get medicine by id : id not exists")
-	void testFindByIdNotExists() {
+	void testFindByIdNotExists() throws MedicineNotFoundException {
 		
-		Medicine testdata = new Medicine("M01","paracetmol",56,LocalDate.parse("2021-03-22"),LocalDate.parse("2022-09-09"),11,Company.Divis,"HERBAL");
-		MedicineModel expected = new MedicineModel("M01","paracetmol",56,LocalDate.parse("2021-03-22"),LocalDate.parse("2022-09-09"),"HERBAL","Divis");
-		
-		Mockito.when(medicineRepository.findById(testdata.getMedicineId())).thenReturn(Optional.empty());
-		
-		MedicineModel actual=medicineServiceImpl.findById(testdata.getMedicineId());
-		assertNotEquals(expected,actual);
+		Mockito.when(medicineRepository.existsById("M01")).thenReturn(false);
+		assertThrows(MedicineNotFoundException.class, () -> {
+			medicineServiceImpl.findById("M01");
+		});
 		
 	}
 	@Test

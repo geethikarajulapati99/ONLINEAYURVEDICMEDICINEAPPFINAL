@@ -113,8 +113,4 @@ public class UserModel {
 		return String.format("UserModel [customerId=%s, password=%s, role=%s]", customerId, password, role);
 	}
 	
-	
-	
-	
-
 }

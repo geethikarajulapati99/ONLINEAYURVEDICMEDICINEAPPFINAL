@@ -66,10 +66,13 @@ public class CustomerServiceImpl implements ICustomerService{
 		cusRepo.deleteById(customerId);
 		
 	}
+	
 	@Transactional
 	@Override
-	public CustomerModel findById(Long customerId) {
-		return parser.parse(cusRepo.findById(customerId).orElse(null));
+	public CustomerModel findById(Long customerId) throws CustomerNotFoundException {
+		if (!cusRepo.existsById(customerId))
+			throw new CustomerNotFoundException("No Customer  found for the given id");
+		return parser.parse(cusRepo.findById(customerId).get());
 	}
 	
 	@Transactional

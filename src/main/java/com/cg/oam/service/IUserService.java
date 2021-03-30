@@ -13,10 +13,9 @@ public interface IUserService {
 	UserModel save(UserModel user) throws UserException;
 	
 	UserModel signIn(UserModel user) throws UserException;	
-	UserModel signOut(UserModel user);
 	
 	void deleteById(Long customerId);
 	
-	UserModel findById(Long customerId);
+	UserModel findById(Long customerId) throws UserException;
 	List<UserModel> findAll();
 }

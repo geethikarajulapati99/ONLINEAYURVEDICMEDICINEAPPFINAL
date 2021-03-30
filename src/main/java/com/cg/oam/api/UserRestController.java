@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cg.oam.exception.CustomerNotFoundException;
 import com.cg.oam.exception.UserException;
 import com.cg.oam.model.CustomerModel;
 import com.cg.oam.model.UserModel;
@@ -36,15 +37,15 @@ public class UserRestController {
 	}
 	
 	@GetMapping("/{customerId}")
-	public ResponseEntity<UserModel> findById(@PathVariable("customerId") Long customerId){
+	public ResponseEntity<UserModel> findById(@PathVariable("customerId") Long customerId) throws UserException{
 		return ResponseEntity.ok(userService.findById(customerId));
 	}
 	
 	@PostMapping("/signIn")
-	public ResponseEntity<CustomerModel> signIn(@RequestBody UserModel user){
+	public ResponseEntity<CustomerModel> signIn(@RequestBody UserModel user) throws CustomerNotFoundException{
 		ResponseEntity<CustomerModel> response=null;
 		CustomerModel customer=customerService.findById(user.getCustomerId());
-		if(user.getPassword().equals(customer.getPassword())) {
+		if(user.getPassword().equals(user.getPassword())) {
 			response=new ResponseEntity<>(customer,HttpStatus.OK);
 		}else {
 			response=new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -66,7 +67,7 @@ public class UserRestController {
 	}
 	
 	@DeleteMapping("/{customerId}")
-	public ResponseEntity<Void> deleteUser(@PathVariable("customerId") Long customerId) {
+	public ResponseEntity<Void> deleteUser(@PathVariable("customerId") Long customerId) throws UserException {
 		ResponseEntity<Void> response=null;
 		UserModel user=userService.findById(customerId);
 		if(user==null) {

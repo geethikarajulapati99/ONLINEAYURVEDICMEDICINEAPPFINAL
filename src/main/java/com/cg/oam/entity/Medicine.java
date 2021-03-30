@@ -43,6 +43,8 @@ public class Medicine implements Serializable{
 	@ManyToMany
 	private List<Order> orders;
 	
+	
+	
 	public Medicine(String medicineId,float medicineCost,int quantity) {
 		super();
 		this.medicineId = medicineId;
@@ -131,10 +133,6 @@ public class Medicine implements Serializable{
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-	
-	
-	
-	
+	}	
 
 }

@@ -7,7 +7,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 
-
 public class MedicineModel {
 	@NotNull(message="cannot be omitted")
 	private String medicineId;
@@ -59,6 +58,7 @@ public class MedicineModel {
 		this.expiryDate = expiryDate;
 		this.companyName = companyName;
 	}
+	
 	public MedicineModel(String medicineId, String medicineName, float medicineCost, LocalDate mfd,
 			LocalDate expiryDate,String categoryId, String companyName) {
 		super();
@@ -84,115 +84,61 @@ public class MedicineModel {
 		this.companyName = companyName;
 	}
 
-
 	public String getMedicineId() {
 		return medicineId;
 	}
-
 
 	public void setMedicineId(String medicineId) {
 		this.medicineId = medicineId;
 	}
 
-
-
-
-
 	public String getMedicineName() {
 		return medicineName;
 	}
-
-
-
-
 
 	public void setMedicineName(String medicineName) {
 		this.medicineName = medicineName;
 	}
 
-
-
-
-
 	public float getMedicineCost() {
 		return medicineCost;
 	}
-
-
-
-
 
 	public void setMedicineCost(float medicineCost) {
 		this.medicineCost = medicineCost;
 	}
 
-
-
-
-
 	public LocalDate getMfd() {
 		return mfd;
 	}
-
-
-
-
 
 	public void setMfd(LocalDate mfd) {
 		this.mfd = mfd;
 	}
 
-
-
-
-
 	public LocalDate getExpiryDate() {
 		return expiryDate;
 	}
 
-
-
-
-
 	public void setExpiryDate(LocalDate expiryDate) {
 		this.expiryDate = expiryDate;
 	}
-
-
-
-
-
+	
 	public String getCategoryId() {
 		return categoryId;
 	}
-
-
-
-
 
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
 
-
-
-
-
 	public String getCompanyName() {
 		return companyName;
 	}
 
-
-
-
-
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
-
-	
-
-
 
 	/**
 	 * @return the quantity
@@ -201,14 +147,12 @@ public class MedicineModel {
 		return quantity;
 	}
 
-
 	/**
 	 * @param quantity the quantity to set
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -223,10 +167,6 @@ public class MedicineModel {
 		result = prime * result + ((mfd == null) ? 0 : mfd.hashCode());
 		return result;
 	}
-
-
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -272,22 +212,11 @@ public class MedicineModel {
 		return true;
 	}
 
-
-
-
-
 	@Override
 	public String toString() {
 		return String.format(
 				"MedicineModel [medicineId=%s, medicineName=%s, medicineCost=%s, mfd=%s, expiryDate=%s, categoryId=%s, companyName=%s]",
 				medicineId, medicineName, medicineCost, mfd, expiryDate, categoryId, companyName);
-	}
-
-
-	
-
-	
-	
-	
+	}	
 	
 }

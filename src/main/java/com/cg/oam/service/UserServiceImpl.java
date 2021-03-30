@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.cg.oam.exception.OrderNotFoundException;
 import com.cg.oam.exception.UserException;
 import com.cg.oam.model.UserModel;
 import com.cg.oam.repository.IUserRepository;
@@ -93,8 +94,10 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public UserModel findById(Long customerId) {
-		return parser.parse(userRepo.findById(customerId).orElse(null));
+	public UserModel findById(Long customerId) throws UserException {
+		if (!userRepo.existsById(customerId))
+			throw new UserException("No User  found for the given id");
+		return parser.parse(userRepo.findById(customerId).get());
 	}
 
 	@Override
@@ -111,10 +114,4 @@ public class UserServiceImpl implements IUserService {
 		}
 	}
 
-	@Override
-	public UserModel signOut(UserModel user) {
-		return null;
-	}
-
-
-	}
+}

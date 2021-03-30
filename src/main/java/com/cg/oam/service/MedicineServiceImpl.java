@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cg.oam.entity.Medicine;
+import com.cg.oam.exception.CustomerNotFoundException;
 import com.cg.oam.exception.MedicineNotFoundException;
 import com.cg.oam.model.MedicineModel;
 import com.cg.oam.repository.IMedicineRepository;
@@ -76,10 +77,10 @@ public class MedicineServiceImpl implements IMedicineService{
 	}
 	
 	@Override
-	public MedicineModel findById(String medicineId) {
-		
-		System.out.println("medRepo.findById" + medRepo.findById(medicineId));
-		return parser.parse(medRepo.findById(medicineId).orElse(null));
+	public MedicineModel findById(String medicineId) throws MedicineNotFoundException {
+		if (!medRepo.existsById(medicineId))
+			throw new MedicineNotFoundException("No Medicine  found for the given id");
+		return parser.parse(medRepo.findById(medicineId).get());
 	}
 
 	@Override
@@ -100,7 +101,6 @@ public class MedicineServiceImpl implements IMedicineService{
 	}
 	@Override
 	public boolean existsById(String medicineId) {
-		// TODO Auto-generated method stub
 		return medRepo.existsById(medicineId);
 	}
 

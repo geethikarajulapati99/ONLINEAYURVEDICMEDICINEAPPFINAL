@@ -6,12 +6,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.cg.oam.exception.CustomerNotFoundException;
+import com.cg.oam.exception.OrderNotFoundException;
 
 @RestControllerAdvice
-public class ExceptionAdvisor {
+public class ExceptionAdvisor3 {
 	
-	@ExceptionHandler(CustomerNotFoundException.class)
-	public ResponseEntity<String> handleCustomerNotFoundExceptionAction(CustomerNotFoundException excep) {
+	@ExceptionHandler(OrderNotFoundException.class)
+	public ResponseEntity<String> handleOrderNotFoundExceptionAction(OrderNotFoundException excep) {
 		return new ResponseEntity<>(excep.getMessage(), HttpStatus.BAD_REQUEST);
 	}
 	

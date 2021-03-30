@@ -1,6 +1,7 @@
 package com.cg.oam.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cg.oam.entity.UserEntity;
 import com.cg.oam.exception.OrderNotFoundException;
+import com.cg.oam.exception.UserException;
 import com.cg.oam.model.UserModel;
 import com.cg.oam.repository.IUserRepository;
 
@@ -49,16 +51,26 @@ public class UserServiceTmplTest {
 	
 	@Test
 	@DisplayName("get user by id")
-	void testFindById() throws OrderNotFoundException {
+	void testFindById() throws  UserException {
 		
 		UserEntity testdata = new UserEntity(1L,"Swarna&123","customer");
 		UserModel expected = new UserModel(1L,"Swarna&123","customer");
 		
 		
 		Mockito.when(userRepository.findById(testdata.getCustomerId())).thenReturn(Optional.of(testdata));
-		
+		Mockito.when(userRepository.existsById(1L)).thenReturn(true);
 		UserModel actual = userServiceImpl.findById(testdata.getCustomerId());
+		
 		assertEquals(expected,actual);
+	}
+	
+	@Test
+	@DisplayName("get user by id : id not exists")
+	void testFindByIdNotExists() throws UserException {
+		Mockito.when(userRepository.existsById(4L)).thenReturn(false);
+		assertThrows(UserException.class, () -> {
+			userServiceImpl.findById(4L);
+		});
 	}
 	
 	@Test

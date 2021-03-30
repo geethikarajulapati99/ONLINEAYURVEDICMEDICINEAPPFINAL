@@ -52,7 +52,7 @@ public class MedicineAPI {
 	}
 	
 	@DeleteMapping("/deletemedicine/{medicineId}")
-	public ResponseEntity<Void> deleteCustomer(@PathVariable("medicineId") String medicineId) {
+	public ResponseEntity<Void> deleteCustomer(@PathVariable("medicineId") String medicineId) throws MedicineNotFoundException {
 		ResponseEntity<Void> response = null;
 		MedicineModel medicine = medService.findById(medicineId);
 		if (medicine == null) {

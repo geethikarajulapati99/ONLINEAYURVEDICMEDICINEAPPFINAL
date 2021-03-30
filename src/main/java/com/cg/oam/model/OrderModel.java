@@ -8,6 +8,7 @@ import com.cg.oam.entity.Medicine;
 public class OrderModel {
 	
 	private Long orderId;
+	
 	private LocalDate orderDate;
 	private LocalDate dispatchDate;
 	private float totalCost;
@@ -21,7 +22,6 @@ public class OrderModel {
 		
 	}
 
-
 	public OrderModel(Long orderId, LocalDate orderDate, LocalDate dispatchDate, float totalCost, String status,
 			Long customerId) {
 		super();
@@ -32,8 +32,6 @@ public class OrderModel {
 		this.status = status;
 		this.customerId = customerId;
 	}
-	
-
 
 	/**
 	 * @return the medicineList
@@ -42,16 +40,12 @@ public class OrderModel {
 		return medicineList;
 	}
 
-
-
 	/**
 	 * @param medicineList the medicineList to set
 	 */
 	public void setMedicineList(List<Medicine> medicineList) {
 		this.medicineList = medicineList;
 	}
-
-
 
 	public OrderModel(Long orderId, LocalDate orderDate, LocalDate dispatchDate, float totalCost, String status,
 			Long customerId, List<Medicine> medicineList) {
@@ -64,6 +58,7 @@ public class OrderModel {
 		this.customerId = customerId;
 		this.medicineList = medicineList;
 	}
+	
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -104,19 +99,13 @@ public class OrderModel {
 		this.status = status;
 	}
 
-
-
 	public Long getCustomerId() {
 		return customerId;
 	}
 
-	
-
 	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-
-
 
 	@Override
 	public int hashCode() {
@@ -130,8 +119,6 @@ public class OrderModel {
 		result = prime * result + Float.floatToIntBits(totalCost);
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -172,14 +159,11 @@ public class OrderModel {
 		return true;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return String.format(
 				"OrderModel [orderId=%s, orderDate=%s, dispatchDate=%s, totalCost=%s, status=%s, customerId=%s]",
 				orderId, orderDate, dispatchDate, totalCost, status, customerId);
 	}
-	
-	
+		
 }
